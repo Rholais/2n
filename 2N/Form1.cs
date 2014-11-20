@@ -204,18 +204,18 @@ namespace _2N
 
 	public class Node
 	{
-		public Double v = 0;
-		public Double r = 0;
+		public double v = 0;
+		public double r = 0;
 		public Node() { }
 	}
 
 	public class Transistor
 	{
-		public const Boolean SI = false;
-		public const Boolean GE = true;
+		public const bool SI = false;
+		public const bool GE = true;
 
-		public Boolean mode = SI;
-		public Double beta = 1.0;
+		public bool mode = SI;
+		public double beta = 1.0;
 		public Node b,
 			c,
 			e;
