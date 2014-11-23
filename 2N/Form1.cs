@@ -23,19 +23,19 @@ namespace _2N
 
 		private void radioButtonSi_CheckedChanged(object sender, EventArgs e)
 		{
-			t.mode = !radioButtonSi.Checked;
+			t.Mode = !radioButtonSi.Checked;
 		}
 
 		private void radioButtonGe_CheckedChanged(object sender, EventArgs e)
 		{
-			t.mode = radioButtonGe.Checked;
+			t.Mode = radioButtonGe.Checked;
 		}
 
 		private void textBoxBV_TextChanged(object sender, EventArgs e)
 		{
 			try 
 			{	        
-				t.b.v = Convert.ToDouble(textBoxBV.Text);
+				t.b.V = Convert.ToDouble(textBoxBV.Text);
 			}
 			catch (FormatException f)
 			{
@@ -47,7 +47,7 @@ namespace _2N
 		{
 			try 
 			{	        
-				t.c.v = Convert.ToDouble(textBoxCV.Text);
+				t.c.V = Convert.ToDouble(textBoxCV.Text);
 			}
 			catch (FormatException f)
 			{
@@ -59,7 +59,7 @@ namespace _2N
 		{
 			try 
 			{	        
-				t.e.v = Convert.ToDouble(textBoxEV.Text);
+				t.e.V = Convert.ToDouble(textBoxEV.Text);
 			}
 			catch (FormatException f)
 			{
@@ -71,7 +71,7 @@ namespace _2N
 		{
 			try 
 			{	        
-				t.beta = Convert.ToDouble(textBoxBeta.Text);
+				t.Beta = Convert.ToDouble(textBoxBeta.Text);
 			}
 			catch (FormatException f)
 			{
@@ -84,7 +84,7 @@ namespace _2N
 		{
 			try 
 			{	        
-				t.b.r = Convert.ToDouble(textBoxBR.Text);
+				t.b.R = Convert.ToDouble(textBoxBR.Text);
 			}
 			catch (FormatException f)
 			{
@@ -96,7 +96,7 @@ namespace _2N
 		{
 			try 
 			{	        
-				t.c.r = Convert.ToDouble(textBoxCR.Text);
+				t.c.R = Convert.ToDouble(textBoxCR.Text);
 			}
 			catch (FormatException f)
 			{
@@ -108,7 +108,7 @@ namespace _2N
 		{
 			try 
 			{	        
-				t.e.r = Convert.ToDouble(textBoxER.Text);
+				t.e.R = Convert.ToDouble(textBoxER.Text);
 			}
 			catch (FormatException f)
 			{
@@ -174,14 +174,14 @@ namespace _2N
 					using (StreamWriter w = new StreamWriter(saveFileDialog2N.FileName, false, Encoding.Default))
 					{
 						// Insert code to write the stream here.
-						w.WriteLine(Convert.ToDouble(Convert.ToDouble(t.mode)));
-						w.WriteLine(t.beta);
-						w.WriteLine(t.b.v);
-						w.WriteLine(t.b.r); 
-						w.WriteLine(t.c.v);
-						w.WriteLine(t.c.r); 
-						w.WriteLine(t.e.v);
-						w.WriteLine(t.e.r);
+						w.WriteLine(Convert.ToDouble(Convert.ToDouble(t.Mode)));
+						w.WriteLine(t.Beta);
+						w.WriteLine(t.b.V);
+						w.WriteLine(t.b.R); 
+						w.WriteLine(t.c.V);
+						w.WriteLine(t.c.R); 
+						w.WriteLine(t.e.V);
+						w.WriteLine(t.e.R);
 					}
 				}
 				catch (Exception ex)
@@ -204,22 +204,92 @@ namespace _2N
 
 	public class Node
 	{
-		public double v = 0;
-		public double r = 0;
-		public Node() { }
+        private double v = 0;
+        private double r = 0;
+
+        public double V
+        {
+            get
+            {
+                return v;
+            }
+
+            set
+            {
+                v = value;
+            }
+        }
+
+        public double R
+        {
+            get
+            {
+                return r;
+            }
+
+            set
+            {
+                r = value;
+            }
+        }
+
+        public Node() { }
 	}
 
 	public class Transistor
 	{
-		public const bool SI = false;
-		public const bool GE = true;
+        private const bool sI = false;
+        private const bool gE = true;
 
-		public bool mode = SI;
-		public double beta = 1.0;
-		public Node b,
+        private bool mode = SI;
+        private double beta = 1.0;
+        public Node b,
 			c,
 			e;
-		public Transistor()
+
+        public static bool SI
+        {
+            get
+            {
+                return sI;
+            }
+        }
+
+        public static bool GE
+        {
+            get
+            {
+                return gE;
+            }
+        }
+
+        public bool Mode
+        {
+            get
+            {
+                return mode;
+            }
+
+            set
+            {
+                mode = value;
+            }
+        }
+
+        public double Beta
+        {
+            get
+            {
+                return beta;
+            }
+
+            set
+            {
+                beta = value;
+            }
+        }
+
+        public Transistor()
 		{
 			b = new Node();
 			c = new Node();
@@ -228,18 +298,18 @@ namespace _2N
 
 		public String isAmplification()
 		{
-			if ((mode == SI && b.v > e.v && c.v > e.v)
-				|| (mode == GE && b.v < e.v && c.v < e.v))
+			if ((Mode == SI && b.V > e.V && c.V > e.V)
+				|| (Mode == GE && b.V < e.V && c.V < e.V))
 			{
-				if ((Math.Abs(b.v - e.v) - 0.7) * (beta * c.r + (beta + 1) * e.r)
-					/ (b.r + (beta + 1) * e.r) <= Math.Abs(c.v - e.v))
+				if ((Math.Abs(b.V - e.V) - 0.7) * (Beta * c.R + (Beta + 1) * e.R)
+					/ (b.R + (Beta + 1) * e.R) <= Math.Abs(c.V - e.V))
 				{
 					return "Amplification";
 				}
 				else return "Saturation";
 			}
-			else if ((mode == SI && b.v < e.v && c.v < e.v)
-				|| (mode == GE && b.v > e.v && c.v > e.v))
+			else if ((Mode == SI && b.V < e.V && c.V < e.V)
+				|| (Mode == GE && b.V > e.V && c.V > e.V))
 			{ return "Invertion"; }
 			else { return "Cut-off"; }
 		}
